@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e16f0575d73480ebe7b76bb4ae3939, type: 3}
+  m_Name: Consume
+  m_EditorClassIdentifier: 
+  m_Parameters:
+  - m_Name: Inventory
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 2bd1e515ae2f240eeb9ecce0ba537756, type: 2}
+    m_ProhibitedTraits: []
+  - m_Name: Need
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 077e3443b9460411b8a29c943b67abab, type: 2}
+    m_ProhibitedTraits: []
+  m_Preconditions:
+  - m_OperandA:
+    - Inventory
+    - Inventory.Amount
+    m_Operator: '>'
+    m_OperandB:
+    - 0
+  - m_OperandA:
+    - Inventory
+    - Inventory.SatisfiesNeed
+    m_Operator: ==
+    m_OperandB:
+    - Need
+    - Need.NeedType
+  - m_OperandA:
+    - Need
+    - Need.Urgency
+    m_Operator: '>'
+    m_OperandB:
+    - Inventory
+    - Inventory.Restoration
+  m_CreatedObjects: []
+  m_RemovedObjects: []
+  m_Effects: []
+  m_Reward: 0
+  m_OperationalActionType: 
+  m_CustomEffect: 
+  m_CustomReward: 
+  m_CustomPrecondition: 
