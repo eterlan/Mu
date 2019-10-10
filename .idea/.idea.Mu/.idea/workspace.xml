@@ -1335,7 +1335,7 @@
       <workItem from="1570585599571" duration="3377000" />
       <workItem from="1570603186295" duration="711000" />
       <workItem from="1570607488619" duration="9002000" />
-      <workItem from="1570678302895" duration="1999000" />
+      <workItem from="1570678302895" duration="2190000" />
     </task>
     <servers />
   </component>
@@ -1356,6 +1356,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
