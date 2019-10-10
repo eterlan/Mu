@@ -53,17 +53,14 @@ namespace AI.Planner.Domains
         {
             TraitArrayIndex<Agent>.Index = 0;
             TraitArrayIndex<Bed>.Index = 1;
-            TraitArrayIndex<ConsumableDispenser>.Index = 2;
-            TraitArrayIndex<Infrastructure>.Index = 3;
-            TraitArrayIndex<Inventory>.Index = 4;
-            TraitArrayIndex<Need>.Index = 5;
-            TraitArrayIndex<ResourcesSpot>.Index = 6;
-            TraitArrayIndex<Time>.Index = 7;
-            TraitArrayIndex<WareHouse>.Index = 8;
-            TraitArrayIndex<Location>.Index = 9;
+            TraitArrayIndex<Item>.Index = 2;
+            TraitArrayIndex<Need>.Index = 3;
+            TraitArrayIndex<ResourcesSpot>.Index = 4;
+            TraitArrayIndex<Time>.Index = 5;
+            TraitArrayIndex<Location>.Index = 6;
         }
 
-        public int Length => 10;
+        public int Length => 7;
 
         public byte this[int i]
         {
@@ -76,20 +73,14 @@ namespace AI.Planner.Domains
                     case 1:
                         return BedIndex;
                     case 2:
-                        return ConsumableDispenserIndex;
+                        return ItemIndex;
                     case 3:
-                        return InfrastructureIndex;
-                    case 4:
-                        return InventoryIndex;
-                    case 5:
                         return NeedIndex;
-                    case 6:
+                    case 4:
                         return ResourcesSpotIndex;
-                    case 7:
+                    case 5:
                         return TimeIndex;
-                    case 8:
-                        return WareHouseIndex;
-                    case 9:
+                    case 6:
                         return LocationIndex;
                 }
 
@@ -106,27 +97,18 @@ namespace AI.Planner.Domains
                         BedIndex = value;
                         break;
                     case 2:
-                        ConsumableDispenserIndex = value;
+                        ItemIndex = value;
                         break;
                     case 3:
-                        InfrastructureIndex = value;
-                        break;
-                    case 4:
-                        InventoryIndex = value;
-                        break;
-                    case 5:
                         NeedIndex = value;
                         break;
-                    case 6:
+                    case 4:
                         ResourcesSpotIndex = value;
                         break;
-                    case 7:
+                    case 5:
                         TimeIndex = value;
                         break;
-                    case 8:
-                        WareHouseIndex = value;
-                        break;
-                    case 9:
+                    case 6:
                         LocationIndex = value;
                         break;
                 }
@@ -139,38 +121,29 @@ namespace AI.Planner.Domains
         {
             AgentIndex = Unset,
             BedIndex = Unset,
-            ConsumableDispenserIndex = Unset,
-            InfrastructureIndex = Unset,
-            InventoryIndex = Unset,
+            ItemIndex = Unset,
             NeedIndex = Unset,
             ResourcesSpotIndex = Unset,
             TimeIndex = Unset,
-            WareHouseIndex = Unset,
             LocationIndex = Unset,
         };
 
 
         public byte AgentIndex;
         public byte BedIndex;
-        public byte ConsumableDispenserIndex;
-        public byte InfrastructureIndex;
-        public byte InventoryIndex;
+        public byte ItemIndex;
         public byte NeedIndex;
         public byte ResourcesSpotIndex;
         public byte TimeIndex;
-        public byte WareHouseIndex;
         public byte LocationIndex;
 
 
         static ComponentType s_AgentType = new ComponentType(typeof(Agent));
         static ComponentType s_BedType = new ComponentType(typeof(Bed));
-        static ComponentType s_ConsumableDispenserType = new ComponentType(typeof(ConsumableDispenser));
-        static ComponentType s_InfrastructureType = new ComponentType(typeof(Infrastructure));
-        static ComponentType s_InventoryType = new ComponentType(typeof(Inventory));
+        static ComponentType s_ItemType = new ComponentType(typeof(Item));
         static ComponentType s_NeedType = new ComponentType(typeof(Need));
         static ComponentType s_ResourcesSpotType = new ComponentType(typeof(ResourcesSpot));
         static ComponentType s_TimeType = new ComponentType(typeof(Time));
-        static ComponentType s_WareHouseType = new ComponentType(typeof(WareHouse));
         static ComponentType s_LocationType = new ComponentType(typeof(Location));
 
         public bool HasSameTraits(DomainObject other)
@@ -214,22 +187,10 @@ namespace AI.Planner.Domains
                         (t.AccessModeType != ComponentType.AccessMode.Exclude && BedIndex == Unset))
                         return false;
                 }
-                else if (t == s_ConsumableDispenserType)
+                else if (t == s_ItemType)
                 {
-                    if ((t.AccessModeType == ComponentType.AccessMode.Exclude && ConsumableDispenserIndex != Unset) ||
-                        (t.AccessModeType != ComponentType.AccessMode.Exclude && ConsumableDispenserIndex == Unset))
-                        return false;
-                }
-                else if (t == s_InfrastructureType)
-                {
-                    if ((t.AccessModeType == ComponentType.AccessMode.Exclude && InfrastructureIndex != Unset) ||
-                        (t.AccessModeType != ComponentType.AccessMode.Exclude && InfrastructureIndex == Unset))
-                        return false;
-                }
-                else if (t == s_InventoryType)
-                {
-                    if ((t.AccessModeType == ComponentType.AccessMode.Exclude && InventoryIndex != Unset) ||
-                        (t.AccessModeType != ComponentType.AccessMode.Exclude && InventoryIndex == Unset))
+                    if ((t.AccessModeType == ComponentType.AccessMode.Exclude && ItemIndex != Unset) ||
+                        (t.AccessModeType != ComponentType.AccessMode.Exclude && ItemIndex == Unset))
                         return false;
                 }
                 else if (t == s_NeedType)
@@ -248,12 +209,6 @@ namespace AI.Planner.Domains
                 {
                     if ((t.AccessModeType == ComponentType.AccessMode.Exclude && TimeIndex != Unset) ||
                         (t.AccessModeType != ComponentType.AccessMode.Exclude && TimeIndex == Unset))
-                        return false;
-                }
-                else if (t == s_WareHouseType)
-                {
-                    if ((t.AccessModeType == ComponentType.AccessMode.Exclude && WareHouseIndex != Unset) ||
-                        (t.AccessModeType != ComponentType.AccessMode.Exclude && WareHouseIndex == Unset))
                         return false;
                 }
                 else if (t == s_LocationType)
@@ -280,24 +235,18 @@ namespace AI.Planner.Domains
 
         public DynamicBuffer<Agent> AgentBuffer;
         public DynamicBuffer<Bed> BedBuffer;
-        public DynamicBuffer<ConsumableDispenser> ConsumableDispenserBuffer;
-        public DynamicBuffer<Infrastructure> InfrastructureBuffer;
-        public DynamicBuffer<Inventory> InventoryBuffer;
+        public DynamicBuffer<Item> ItemBuffer;
         public DynamicBuffer<Need> NeedBuffer;
         public DynamicBuffer<ResourcesSpot> ResourcesSpotBuffer;
         public DynamicBuffer<Time> TimeBuffer;
-        public DynamicBuffer<WareHouse> WareHouseBuffer;
         public DynamicBuffer<Location> LocationBuffer;
 
         static ComponentType s_AgentType = new ComponentType(typeof(Agent));
         static ComponentType s_BedType = new ComponentType(typeof(Bed));
-        static ComponentType s_ConsumableDispenserType = new ComponentType(typeof(ConsumableDispenser));
-        static ComponentType s_InfrastructureType = new ComponentType(typeof(Infrastructure));
-        static ComponentType s_InventoryType = new ComponentType(typeof(Inventory));
+        static ComponentType s_ItemType = new ComponentType(typeof(Item));
         static ComponentType s_NeedType = new ComponentType(typeof(Need));
         static ComponentType s_ResourcesSpotType = new ComponentType(typeof(ResourcesSpot));
         static ComponentType s_TimeType = new ComponentType(typeof(Time));
-        static ComponentType s_WareHouseType = new ComponentType(typeof(WareHouse));
         static ComponentType s_LocationType = new ComponentType(typeof(Location));
 
         public StateData(JobComponentSystem system, Entity stateEntity, bool readWrite = false)
@@ -308,13 +257,10 @@ namespace AI.Planner.Domains
 
             AgentBuffer = system.GetBufferFromEntity<Agent>(!readWrite)[stateEntity];
             BedBuffer = system.GetBufferFromEntity<Bed>(!readWrite)[stateEntity];
-            ConsumableDispenserBuffer = system.GetBufferFromEntity<ConsumableDispenser>(!readWrite)[stateEntity];
-            InfrastructureBuffer = system.GetBufferFromEntity<Infrastructure>(!readWrite)[stateEntity];
-            InventoryBuffer = system.GetBufferFromEntity<Inventory>(!readWrite)[stateEntity];
+            ItemBuffer = system.GetBufferFromEntity<Item>(!readWrite)[stateEntity];
             NeedBuffer = system.GetBufferFromEntity<Need>(!readWrite)[stateEntity];
             ResourcesSpotBuffer = system.GetBufferFromEntity<ResourcesSpot>(!readWrite)[stateEntity];
             TimeBuffer = system.GetBufferFromEntity<Time>(!readWrite)[stateEntity];
-            WareHouseBuffer = system.GetBufferFromEntity<WareHouse>(!readWrite)[stateEntity];
             LocationBuffer = system.GetBufferFromEntity<Location>(!readWrite)[stateEntity];
         }
 
@@ -326,13 +272,10 @@ namespace AI.Planner.Domains
 
             AgentBuffer = entityCommandBuffer.AddBuffer<Agent>(jobIndex, stateEntity);
             BedBuffer = entityCommandBuffer.AddBuffer<Bed>(jobIndex, stateEntity);
-            ConsumableDispenserBuffer = entityCommandBuffer.AddBuffer<ConsumableDispenser>(jobIndex, stateEntity);
-            InfrastructureBuffer = entityCommandBuffer.AddBuffer<Infrastructure>(jobIndex, stateEntity);
-            InventoryBuffer = entityCommandBuffer.AddBuffer<Inventory>(jobIndex, stateEntity);
+            ItemBuffer = entityCommandBuffer.AddBuffer<Item>(jobIndex, stateEntity);
             NeedBuffer = entityCommandBuffer.AddBuffer<Need>(jobIndex, stateEntity);
             ResourcesSpotBuffer = entityCommandBuffer.AddBuffer<ResourcesSpot>(jobIndex, stateEntity);
             TimeBuffer = entityCommandBuffer.AddBuffer<Time>(jobIndex, stateEntity);
-            WareHouseBuffer = entityCommandBuffer.AddBuffer<WareHouse>(jobIndex, stateEntity);
             LocationBuffer = entityCommandBuffer.AddBuffer<Location>(jobIndex, stateEntity);
         }
 
@@ -348,20 +291,14 @@ namespace AI.Planner.Domains
             Agents.CopyFrom(AgentBuffer.AsNativeArray());
             var Beds = entityCommandBuffer.SetBuffer<Bed>(jobIndex, stateEntity);
             Beds.CopyFrom(BedBuffer.AsNativeArray());
-            var ConsumableDispensers = entityCommandBuffer.SetBuffer<ConsumableDispenser>(jobIndex, stateEntity);
-            ConsumableDispensers.CopyFrom(ConsumableDispenserBuffer.AsNativeArray());
-            var Infrastructures = entityCommandBuffer.SetBuffer<Infrastructure>(jobIndex, stateEntity);
-            Infrastructures.CopyFrom(InfrastructureBuffer.AsNativeArray());
-            var Inventorys = entityCommandBuffer.SetBuffer<Inventory>(jobIndex, stateEntity);
-            Inventorys.CopyFrom(InventoryBuffer.AsNativeArray());
+            var Items = entityCommandBuffer.SetBuffer<Item>(jobIndex, stateEntity);
+            Items.CopyFrom(ItemBuffer.AsNativeArray());
             var Needs = entityCommandBuffer.SetBuffer<Need>(jobIndex, stateEntity);
             Needs.CopyFrom(NeedBuffer.AsNativeArray());
             var ResourcesSpots = entityCommandBuffer.SetBuffer<ResourcesSpot>(jobIndex, stateEntity);
             ResourcesSpots.CopyFrom(ResourcesSpotBuffer.AsNativeArray());
             var Times = entityCommandBuffer.SetBuffer<Time>(jobIndex, stateEntity);
             Times.CopyFrom(TimeBuffer.AsNativeArray());
-            var WareHouses = entityCommandBuffer.SetBuffer<WareHouse>(jobIndex, stateEntity);
-            WareHouses.CopyFrom(WareHouseBuffer.AsNativeArray());
             var Locations = entityCommandBuffer.SetBuffer<Location>(jobIndex, stateEntity);
             Locations.CopyFrom(LocationBuffer.AsNativeArray());
 
@@ -373,13 +310,10 @@ namespace AI.Planner.Domains
 
                 AgentBuffer = Agents,
                 BedBuffer = Beds,
-                ConsumableDispenserBuffer = ConsumableDispensers,
-                InfrastructureBuffer = Infrastructures,
-                InventoryBuffer = Inventorys,
+                ItemBuffer = Items,
                 NeedBuffer = Needs,
                 ResourcesSpotBuffer = ResourcesSpots,
                 TimeBuffer = Times,
-                WareHouseBuffer = WareHouses,
                 LocationBuffer = Locations,
             };
         }
@@ -405,20 +339,10 @@ namespace AI.Planner.Domains
                     BedBuffer.Add(default);
                     domainObject.BedIndex = (byte) (BedBuffer.Length - 1);
                 }
-                else if (t == s_ConsumableDispenserType)
+                else if (t == s_ItemType)
                 {
-                    ConsumableDispenserBuffer.Add(default);
-                    domainObject.ConsumableDispenserIndex = (byte) (ConsumableDispenserBuffer.Length - 1);
-                }
-                else if (t == s_InfrastructureType)
-                {
-                    InfrastructureBuffer.Add(default);
-                    domainObject.InfrastructureIndex = (byte) (InfrastructureBuffer.Length - 1);
-                }
-                else if (t == s_InventoryType)
-                {
-                    InventoryBuffer.Add(default);
-                    domainObject.InventoryIndex = (byte) (InventoryBuffer.Length - 1);
+                    ItemBuffer.Add(default);
+                    domainObject.ItemIndex = (byte) (ItemBuffer.Length - 1);
                 }
                 else if (t == s_NeedType)
                 {
@@ -434,11 +358,6 @@ namespace AI.Planner.Domains
                 {
                     TimeBuffer.Add(default);
                     domainObject.TimeIndex = (byte) (TimeBuffer.Length - 1);
-                }
-                else if (t == s_WareHouseType)
-                {
-                    WareHouseBuffer.Add(default);
-                    domainObject.WareHouseIndex = (byte) (WareHouseBuffer.Length - 1);
                 }
                 else if (t == s_LocationType)
                 {
@@ -459,20 +378,14 @@ namespace AI.Planner.Domains
                 SetTraitOnObject(AgentTrait, ref domainObject);
             else if (trait is Bed BedTrait)
                 SetTraitOnObject(BedTrait, ref domainObject);
-            else if (trait is ConsumableDispenser ConsumableDispenserTrait)
-                SetTraitOnObject(ConsumableDispenserTrait, ref domainObject);
-            else if (trait is Infrastructure InfrastructureTrait)
-                SetTraitOnObject(InfrastructureTrait, ref domainObject);
-            else if (trait is Inventory InventoryTrait)
-                SetTraitOnObject(InventoryTrait, ref domainObject);
+            else if (trait is Item ItemTrait)
+                SetTraitOnObject(ItemTrait, ref domainObject);
             else if (trait is Need NeedTrait)
                 SetTraitOnObject(NeedTrait, ref domainObject);
             else if (trait is ResourcesSpot ResourcesSpotTrait)
                 SetTraitOnObject(ResourcesSpotTrait, ref domainObject);
             else if (trait is Time TimeTrait)
                 SetTraitOnObject(TimeTrait, ref domainObject);
-            else if (trait is WareHouse WareHouseTrait)
-                SetTraitOnObject(WareHouseTrait, ref domainObject);
             else if (trait is Location LocationTrait)
                 SetTraitOnObject(LocationTrait, ref domainObject);
             else 
@@ -569,13 +482,10 @@ namespace AI.Planner.Domains
 
             RemoveTraitOnObject<Agent>(ref domainObject);
             RemoveTraitOnObject<Bed>(ref domainObject);
-            RemoveTraitOnObject<ConsumableDispenser>(ref domainObject);
-            RemoveTraitOnObject<Infrastructure>(ref domainObject);
-            RemoveTraitOnObject<Inventory>(ref domainObject);
+            RemoveTraitOnObject<Item>(ref domainObject);
             RemoveTraitOnObject<Need>(ref domainObject);
             RemoveTraitOnObject<ResourcesSpot>(ref domainObject);
             RemoveTraitOnObject<Time>(ref domainObject);
-            RemoveTraitOnObject<WareHouse>(ref domainObject);
             RemoveTraitOnObject<Location>(ref domainObject);
 
             DomainObjects.RemoveAt(objectIndex);
@@ -662,13 +572,10 @@ namespace AI.Planner.Domains
         {
             RemoveTraitOnObjectAtIndex<Agent>(domainObjectIndex);
             RemoveTraitOnObjectAtIndex<Bed>(domainObjectIndex);
-            RemoveTraitOnObjectAtIndex<ConsumableDispenser>(domainObjectIndex);
-            RemoveTraitOnObjectAtIndex<Infrastructure>(domainObjectIndex);
-            RemoveTraitOnObjectAtIndex<Inventory>(domainObjectIndex);
+            RemoveTraitOnObjectAtIndex<Item>(domainObjectIndex);
             RemoveTraitOnObjectAtIndex<Need>(domainObjectIndex);
             RemoveTraitOnObjectAtIndex<ResourcesSpot>(domainObjectIndex);
             RemoveTraitOnObjectAtIndex<Time>(domainObjectIndex);
-            RemoveTraitOnObjectAtIndex<WareHouse>(domainObjectIndex);
             RemoveTraitOnObjectAtIndex<Location>(domainObjectIndex);
 
             DomainObjects.RemoveAt(domainObjectIndex);
@@ -758,20 +665,14 @@ namespace AI.Planner.Domains
                 case 1:
                     return BedBuffer.Reinterpret<T>();
                 case 2:
-                    return ConsumableDispenserBuffer.Reinterpret<T>();
+                    return ItemBuffer.Reinterpret<T>();
                 case 3:
-                    return InfrastructureBuffer.Reinterpret<T>();
-                case 4:
-                    return InventoryBuffer.Reinterpret<T>();
-                case 5:
                     return NeedBuffer.Reinterpret<T>();
-                case 6:
+                case 4:
                     return ResourcesSpotBuffer.Reinterpret<T>();
-                case 7:
+                case 5:
                     return TimeBuffer.Reinterpret<T>();
-                case 8:
-                    return WareHouseBuffer.Reinterpret<T>();
-                case 9:
+                case 6:
                     return LocationBuffer.Reinterpret<T>();
             }
 
@@ -787,13 +688,10 @@ namespace AI.Planner.Domains
             if (DomainObjects.Length != other.DomainObjects.Length
                 || AgentBuffer.Length != other.AgentBuffer.Length
                 || BedBuffer.Length != other.BedBuffer.Length
-                || ConsumableDispenserBuffer.Length != other.ConsumableDispenserBuffer.Length
-                || InfrastructureBuffer.Length != other.InfrastructureBuffer.Length
-                || InventoryBuffer.Length != other.InventoryBuffer.Length
+                || ItemBuffer.Length != other.ItemBuffer.Length
                 || NeedBuffer.Length != other.NeedBuffer.Length
                 || ResourcesSpotBuffer.Length != other.ResourcesSpotBuffer.Length
                 || TimeBuffer.Length != other.TimeBuffer.Length
-                || WareHouseBuffer.Length != other.WareHouseBuffer.Length
                 || LocationBuffer.Length != other.LocationBuffer.Length)
                 return false;
 
@@ -807,13 +705,10 @@ namespace AI.Planner.Domains
 
                 var hasAgent = domainObjectLHS.AgentIndex != DomainObject.Unset;
                 var hasBed = domainObjectLHS.BedIndex != DomainObject.Unset;
-                var hasConsumableDispenser = domainObjectLHS.ConsumableDispenserIndex != DomainObject.Unset;
-                var hasInfrastructure = domainObjectLHS.InfrastructureIndex != DomainObject.Unset;
-                var hasInventory = domainObjectLHS.InventoryIndex != DomainObject.Unset;
+                var hasItem = domainObjectLHS.ItemIndex != DomainObject.Unset;
                 var hasNeed = domainObjectLHS.NeedIndex != DomainObject.Unset;
                 var hasResourcesSpot = domainObjectLHS.ResourcesSpotIndex != DomainObject.Unset;
                 var hasTime = domainObjectLHS.TimeIndex != DomainObject.Unset;
-                var hasWareHouse = domainObjectLHS.WareHouseIndex != DomainObject.Unset;
                 var hasLocation = domainObjectLHS.LocationIndex != DomainObject.Unset;
 
                 var foundMatch = false;
@@ -828,19 +723,13 @@ namespace AI.Planner.Domains
                         continue;
                     if (hasBed && !BedBuffer[domainObjectLHS.BedIndex].Equals(other.BedBuffer[domainObjectRHS.BedIndex]))
                         continue;
-                    if (hasConsumableDispenser && !ConsumableDispenserBuffer[domainObjectLHS.ConsumableDispenserIndex].Equals(other.ConsumableDispenserBuffer[domainObjectRHS.ConsumableDispenserIndex]))
-                        continue;
-                    if (hasInfrastructure && !InfrastructureBuffer[domainObjectLHS.InfrastructureIndex].Equals(other.InfrastructureBuffer[domainObjectRHS.InfrastructureIndex]))
-                        continue;
-                    if (hasInventory && !InventoryBuffer[domainObjectLHS.InventoryIndex].Equals(other.InventoryBuffer[domainObjectRHS.InventoryIndex]))
+                    if (hasItem && !ItemBuffer[domainObjectLHS.ItemIndex].Equals(other.ItemBuffer[domainObjectRHS.ItemIndex]))
                         continue;
                     if (hasNeed && !NeedBuffer[domainObjectLHS.NeedIndex].Equals(other.NeedBuffer[domainObjectRHS.NeedIndex]))
                         continue;
                     if (hasResourcesSpot && !ResourcesSpotBuffer[domainObjectLHS.ResourcesSpotIndex].Equals(other.ResourcesSpotBuffer[domainObjectRHS.ResourcesSpotIndex]))
                         continue;
                     if (hasTime && !TimeBuffer[domainObjectLHS.TimeIndex].Equals(other.TimeBuffer[domainObjectRHS.TimeIndex]))
-                        continue;
-                    if (hasWareHouse && !WareHouseBuffer[domainObjectLHS.WareHouseIndex].Equals(other.WareHouseBuffer[domainObjectRHS.WareHouseIndex]))
                         continue;
                     if (hasLocation && !LocationBuffer[domainObjectLHS.LocationIndex].Equals(other.LocationBuffer[domainObjectRHS.LocationIndex]))
                         continue;
@@ -885,17 +774,7 @@ namespace AI.Planner.Domains
                 var value = element.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
-            foreach (var element in ConsumableDispenserBuffer.AsNativeArray())
-            {
-                var value = element.GetHashCode();
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            foreach (var element in InfrastructureBuffer.AsNativeArray())
-            {
-                var value = element.GetHashCode();
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            foreach (var element in InventoryBuffer.AsNativeArray())
+            foreach (var element in ItemBuffer.AsNativeArray())
             {
                 var value = element.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
@@ -911,11 +790,6 @@ namespace AI.Planner.Domains
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
             }
             foreach (var element in TimeBuffer.AsNativeArray())
-            {
-                var value = element.GetHashCode();
-                stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
-            }
-            foreach (var element in WareHouseBuffer.AsNativeArray())
             {
                 var value = element.GetHashCode();
                 stateHashValue = 3860031 + (stateHashValue + value) * 2779 + (stateHashValue * value * 2);
@@ -950,15 +824,7 @@ namespace AI.Planner.Domains
 
                 traitIndex = domainObject[i++];
                 if (traitIndex != DomainObject.Unset)
-                    sb.AppendLine(ConsumableDispenserBuffer[traitIndex].ToString());
-
-                traitIndex = domainObject[i++];
-                if (traitIndex != DomainObject.Unset)
-                    sb.AppendLine(InfrastructureBuffer[traitIndex].ToString());
-
-                traitIndex = domainObject[i++];
-                if (traitIndex != DomainObject.Unset)
-                    sb.AppendLine(InventoryBuffer[traitIndex].ToString());
+                    sb.AppendLine(ItemBuffer[traitIndex].ToString());
 
                 traitIndex = domainObject[i++];
                 if (traitIndex != DomainObject.Unset)
@@ -971,10 +837,6 @@ namespace AI.Planner.Domains
                 traitIndex = domainObject[i++];
                 if (traitIndex != DomainObject.Unset)
                     sb.AppendLine(TimeBuffer[traitIndex].ToString());
-
-                traitIndex = domainObject[i++];
-                if (traitIndex != DomainObject.Unset)
-                    sb.AppendLine(WareHouseBuffer[traitIndex].ToString());
 
                 traitIndex = domainObject[i++];
                 if (traitIndex != DomainObject.Unset)
@@ -998,13 +860,10 @@ namespace AI.Planner.Domains
 
         [ReadOnly] public BufferFromEntity<Agent> AgentData;
         [ReadOnly] public BufferFromEntity<Bed> BedData;
-        [ReadOnly] public BufferFromEntity<ConsumableDispenser> ConsumableDispenserData;
-        [ReadOnly] public BufferFromEntity<Infrastructure> InfrastructureData;
-        [ReadOnly] public BufferFromEntity<Inventory> InventoryData;
+        [ReadOnly] public BufferFromEntity<Item> ItemData;
         [ReadOnly] public BufferFromEntity<Need> NeedData;
         [ReadOnly] public BufferFromEntity<ResourcesSpot> ResourcesSpotData;
         [ReadOnly] public BufferFromEntity<Time> TimeData;
-        [ReadOnly] public BufferFromEntity<WareHouse> WareHouseData;
         [ReadOnly] public BufferFromEntity<Location> LocationData;
 
         public StateDataContext(JobComponentSystem system, EntityArchetype stateArchetype)
@@ -1015,13 +874,10 @@ namespace AI.Planner.Domains
 
             AgentData = system.GetBufferFromEntity<Agent>(true);
             BedData = system.GetBufferFromEntity<Bed>(true);
-            ConsumableDispenserData = system.GetBufferFromEntity<ConsumableDispenser>(true);
-            InfrastructureData = system.GetBufferFromEntity<Infrastructure>(true);
-            InventoryData = system.GetBufferFromEntity<Inventory>(true);
+            ItemData = system.GetBufferFromEntity<Item>(true);
             NeedData = system.GetBufferFromEntity<Need>(true);
             ResourcesSpotData = system.GetBufferFromEntity<ResourcesSpot>(true);
             TimeData = system.GetBufferFromEntity<Time>(true);
-            WareHouseData = system.GetBufferFromEntity<WareHouse>(true);
             LocationData = system.GetBufferFromEntity<Location>(true);
 
             m_StateArchetype = stateArchetype;
@@ -1040,13 +896,10 @@ namespace AI.Planner.Domains
 
                 AgentBuffer = AgentData[stateEntity],
                 BedBuffer = BedData[stateEntity],
-                ConsumableDispenserBuffer = ConsumableDispenserData[stateEntity],
-                InfrastructureBuffer = InfrastructureData[stateEntity],
-                InventoryBuffer = InventoryData[stateEntity],
+                ItemBuffer = ItemData[stateEntity],
                 NeedBuffer = NeedData[stateEntity],
                 ResourcesSpotBuffer = ResourcesSpotData[stateEntity],
                 TimeBuffer = TimeData[stateEntity],
-                WareHouseBuffer = WareHouseData[stateEntity],
                 LocationBuffer = LocationData[stateEntity],
             };
         }
@@ -1096,13 +949,10 @@ namespace AI.Planner.Domains
             m_StateArchetype = EntityManager.CreateArchetype(typeof(State), typeof(DomainObject), typeof(DomainObjectID), typeof(HashCode),
                 typeof(Agent),
                 typeof(Bed),
-                typeof(ConsumableDispenser),
-                typeof(Infrastructure),
-                typeof(Inventory),
+                typeof(Item),
                 typeof(Need),
                 typeof(ResourcesSpot),
                 typeof(Time),
-                typeof(WareHouse),
                 typeof(Location));
         }
 

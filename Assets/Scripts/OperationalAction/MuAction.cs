@@ -4,7 +4,7 @@ using Unity.AI.Planner.DomainLanguage.TraitBased;
 using Unity.Collections;
 using Time = UnityEngine.Time;
 
-public class MuAction : IOperationalAction<Mu, StateData, ActionKey>
+public abstract class MuAction : IOperationalAction<Mu, StateData, ActionKey>
 {
     // AnimationNotImplemented -> True for now.
     public bool AnimationComplete = true;
@@ -12,7 +12,7 @@ public class MuAction : IOperationalAction<Mu, StateData, ActionKey>
     protected float MinUnitTime = 1f;
     protected float StartTime;
     
-    public void BeginExecution
+    public virtual void  BeginExecution
     (StateData state,
      ActionKey action,
      Mu        agent)
@@ -62,7 +62,7 @@ public class MuAction : IOperationalAction<Mu, StateData, ActionKey>
         }
     }
 
-    public void ContinueExecution
+    public virtual void ContinueExecution
     (StateData state,
      ActionKey action,
      Mu        agent)
@@ -70,7 +70,7 @@ public class MuAction : IOperationalAction<Mu, StateData, ActionKey>
         UpdateNeed(state,agent);
     }
 
-    public void EndExecution
+    public virtual void EndExecution
     (StateData state,
      ActionKey action,
      Mu        agent)
@@ -78,7 +78,7 @@ public class MuAction : IOperationalAction<Mu, StateData, ActionKey>
         UpdateNeed(state,agent);
     }
 
-    public OperationalActionStatus Status
+    public virtual OperationalActionStatus Status
     (StateData state,
      ActionKey action,
      Mu        agent)

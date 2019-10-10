@@ -27,6 +27,10 @@ MonoBehaviour:
     m_RequiredTraits:
     - {fileID: 11400000, guid: 077e3443b9460411b8a29c943b67abab, type: 2}
     m_ProhibitedTraits: []
+  - m_Name: Time
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: bdbf7a1f9df774a24a5d24ee6fe3b60d, type: 2}
+    m_ProhibitedTraits: []
   m_Preconditions:
   - m_OperandA:
     - Agent
@@ -58,8 +62,15 @@ MonoBehaviour:
     m_OperandB:
     - Bed
     - Bed.Restoration
-  m_Reward: 0
-  m_OperationalActionType: 
+  - m_OperandA:
+    - Time
+    - Time.Value
+    m_Operator: +=
+    m_OperandB:
+    - Bed
+    - Bed.SleepDuration
+  m_Reward: -3
+  m_OperationalActionType: SleepAction
   m_CustomEffect: 
   m_CustomReward: 
   m_CustomPrecondition: 

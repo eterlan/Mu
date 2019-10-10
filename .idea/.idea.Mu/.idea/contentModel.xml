@@ -7,13 +7,25 @@
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="AI.Planner" t="Include">
+          <e p="Custom" t="Include">
+            <e p="Custom.asmdef" t="Include" />
+            <e p="CustomPickUpPrecondition.cs" t="Include" />
+          </e>
+        </e>
         <e p="Scripts" t="Include">
           <e p="Mu.cs" t="Include" />
           <e p="OperationalAction" t="Include">
+            <e p="ConsumeAction.cs" t="Include" />
+            <e p="ExploitAction.cs" t="Include" />
             <e p="MuAction.cs" t="Include" />
+            <e p="NavigateAction.cs" t="Include" />
+            <e p="PickupAction.cs" t="Include" />
+            <e p="SleepAction.cs" t="Include" />
           </e>
         </e>
       </e>
+      <e p="Custom.csproj" t="IncludeRecursive" />
       <e p="Mu.sln" t="IncludeFlat" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="Packages" t="ExcludeRecursive" />

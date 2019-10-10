@@ -5,12 +5,12 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.AI.Planner.DomainLanguage.TraitBased;
 
-#if PLANNER_DOMAIN_GENERATED
+//#if PLANNER_DOMAIN_GENERATED
 using AI.Planner.Actions.Mu;
 using AI.Planner.Domains;
-#endif
+//#endif
 
-#if PLANNER_DOMAIN_GENERATED
+//#if PLANNER_DOMAIN_GENERATED
 [Serializable]
 public class Mu : BaseAgent<Mu, DomainObject, StateEntityKey, StateData, StateDataContext, ActionScheduler, 
 NeedHeuristic, TerminationEvaluator, StateManager, ActionKey>
@@ -22,7 +22,7 @@ NeedHeuristic, TerminationEvaluator, StateManager, ActionKey>
     void Awake()
     {
         NeedFilter = new ComponentType[] { typeof(Need) };
-        InventoryFilter = new ComponentType[] { typeof(Inventory) };
+        InventoryFilter = new ComponentType[] { typeof(Item), typeof(Agent) };
     }
 
     protected override void Update()
@@ -61,7 +61,7 @@ public struct NeedHeuristic : IHeuristic<StateData>
         domainObjects.Clear();
         foreach (var (_, domainObjectIndex) in stateData.GetDomainObjects(domainObjects, Mu.InventoryFilter))
         {
-            var inventoryTrait = stateData.GetTraitOnObjectAtIndex<Inventory>(domainObjectIndex);
+            var inventoryTrait = stateData.GetTraitOnObjectAtIndex<Item>(domainObjectIndex);
             value += inventoryTrait.Amount * 10;
         }
         domainObjects.Dispose();
@@ -69,4 +69,4 @@ public struct NeedHeuristic : IHeuristic<StateData>
         return value;
     }
 }
-#endif
+//#endif

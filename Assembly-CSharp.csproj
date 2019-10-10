@@ -57,7 +57,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Mu.cs" />
+     <Compile Include="Assets\Scripts\OperationalAction\ConsumeAction.cs" />
+     <Compile Include="Assets\Scripts\OperationalAction\ExploitAction.cs" />
      <Compile Include="Assets\Scripts\OperationalAction\MuAction.cs" />
+     <Compile Include="Assets\Scripts\OperationalAction\NavigateAction.cs" />
+     <Compile Include="Assets\Scripts\OperationalAction\PickupAction.cs" />
+     <Compile Include="Assets\Scripts\OperationalAction\SleepAction.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/Ran/UnityProject/Mu/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
@@ -703,6 +708,12 @@
  <Reference Include="mscorlib">
  <HintPath>/Applications/Unity/Unity.app/Contents/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Custom.csproj">
+      <Project>{C797B8AB-B110-49CD-2380-A730DF6995E9}</Project>
+      <Name>Custom</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

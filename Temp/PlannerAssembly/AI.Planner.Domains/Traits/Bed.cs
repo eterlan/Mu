@@ -11,6 +11,7 @@ namespace AI.Planner.Domains
     {
         public const bool IsZeroSized = false;
         public System.Int64 Restoration;
+        public System.Int64 SleepDuration;
 
         public void SetField(string fieldName, object value)
         {
@@ -19,23 +20,27 @@ namespace AI.Planner.Domains
                 case nameof(Restoration):
                     Restoration = (System.Int64)value;
                     break;
+                case nameof(SleepDuration):
+                    SleepDuration = (System.Int64)value;
+                    break;
             }
         }
 
         public bool Equals(Bed other)
         {
-            return Restoration == other.Restoration;
+            return Restoration == other.Restoration && SleepDuration == other.SleepDuration;
         }
 
         public override int GetHashCode()
         {
             return 397
-                ^ Restoration.GetHashCode();
+                ^ Restoration.GetHashCode()
+                ^ SleepDuration.GetHashCode();
         }
 
         public override string ToString()
         {
-            return $"Bed: {Restoration}";
+            return $"Bed: {Restoration} {SleepDuration}";
         }
     }
 }

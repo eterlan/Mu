@@ -13,13 +13,13 @@ namespace AI.Planner.Actions.Mu
     {
         public static Guid ActionGuid = Guid.NewGuid();
         
-        const int k_FromIndex = 0;
+        const int k_AgentIndex = 0;
         const int k_ToIndex = 1;
-        const int k_objIndex = 2;
+        const int k_TimeIndex = 2;
         const int k_MaxArguments = 3;
-        static readonly ComponentType[] s_FromFilter = {ComponentType.ReadWrite<Location>(),ComponentType.ReadWrite<Agent>(),};
+        static readonly ComponentType[] s_AgentFilter = {ComponentType.ReadWrite<Location>(),ComponentType.ReadWrite<Agent>(),};
         static readonly ComponentType[] s_ToFilter = {ComponentType.ReadWrite<Location>(),};
-        static readonly ComponentType[] s_objFilter = {ComponentType.ReadWrite<Time>(),};
+        static readonly ComponentType[] s_TimeFilter = {ComponentType.ReadWrite<Time>(),};
 
         [ReadOnly] NativeArray<StateEntityKey> m_StatesToExpand;
         [ReadOnly] StateDataContext m_StateDataContext;
@@ -32,36 +32,36 @@ namespace AI.Planner.Actions.Mu
 
         void GenerateArgumentPermutations(StateData stateData, NativeList<ActionKey> argumentPermutations)
         {
-            var FromObjects = new NativeList<(DomainObject, int)>(2, Allocator.Temp);
-            stateData.GetDomainObjects(FromObjects, s_FromFilter);
+            var AgentObjects = new NativeList<(DomainObject, int)>(2, Allocator.Temp);
+            stateData.GetDomainObjects(AgentObjects, s_AgentFilter);
             var ToObjects = new NativeList<(DomainObject, int)>(2, Allocator.Temp);
             stateData.GetDomainObjects(ToObjects, s_ToFilter);
-            var objObjects = new NativeList<(DomainObject, int)>(2, Allocator.Temp);
-            stateData.GetDomainObjects(objObjects, s_objFilter);
+            var TimeObjects = new NativeList<(DomainObject, int)>(2, Allocator.Temp);
+            stateData.GetDomainObjects(TimeObjects, s_TimeFilter);
             var LocationBuffer = stateData.LocationBuffer;
             
-            for (int i0 = 0; i0 < FromObjects.Length; i0++)
+            for (int i0 = 0; i0 < AgentObjects.Length; i0++)
             {
-                var (FromObject, FromIndex) = FromObjects[i0];
+                var (AgentObject, AgentIndex) = AgentObjects[i0];
                 
             
             for (int i1 = 0; i1 < ToObjects.Length; i1++)
             {
                 var (ToObject, ToIndex) = ToObjects[i1];
                 
-                if (!(LocationBuffer[FromObject.LocationIndex].Position != LocationBuffer[ToObject.LocationIndex].Position))
+                if (!(LocationBuffer[AgentObject.LocationIndex].Position != LocationBuffer[ToObject.LocationIndex].Position))
                     continue;
             
-            for (int i2 = 0; i2 < objObjects.Length; i2++)
+            for (int i2 = 0; i2 < TimeObjects.Length; i2++)
             {
-                var (objObject, objIndex) = objObjects[i2];
+                var (TimeObject, TimeIndex) = TimeObjects[i2];
                 
 
                 var actionKey = new ActionKey(k_MaxArguments) {
                                                         ActionGuid = ActionGuid,
-                                                       [k_FromIndex] = FromIndex,
+                                                       [k_AgentIndex] = AgentIndex,
                                                        [k_ToIndex] = ToIndex,
-                                                       [k_objIndex] = objIndex,
+                                                       [k_TimeIndex] = TimeIndex,
                                                     };
 
 
@@ -69,17 +69,25 @@ namespace AI.Planner.Actions.Mu
             }
             }
             }
-                FromObjects.Dispose();
+                AgentObjects.Dispose();
                 ToObjects.Dispose();
-                objObjects.Dispose();
+                TimeObjects.Dispose();
         }
 
         (StateEntityKey, ActionKey, ActionResult, StateEntityKey) ApplyEffects(ActionKey action, StateEntityKey originalStateEntityKey)
         {
             var originalState = m_StateDataContext.GetStateData(originalStateEntityKey);
             var originalStateObjectBuffer = originalState.DomainObjects;
+            var originalAgentObject = originalStateObjectBuffer[action[k_AgentIndex]];
+            var originalToObject = originalStateObjectBuffer[action[k_ToIndex]];
 
             var newState = m_StateDataContext.CopyStateData(originalState);
+            var newLocationBuffer = newState.LocationBuffer;
+            {
+                var @Location = newLocationBuffer[originalAgentObject.LocationIndex];
+                @Location.Position = newLocationBuffer[originalToObject.LocationIndex].Position;
+                newLocationBuffer[originalAgentObject.LocationIndex] = @Location;
+            }
 
             
 
@@ -93,7 +101,7 @@ namespace AI.Planner.Actions.Mu
 
         float Reward(StateData originalState, ActionKey action, StateData newState)
         {
-            var reward = 0f;
+            var reward = -2f;
             return reward;
         }
 
@@ -123,9 +131,9 @@ namespace AI.Planner.Actions.Mu
         }
 
         
-        public static T GetFromTrait<T>(StateData state, ActionKey action) where T : struct, ITrait
+        public static T GetAgentTrait<T>(StateData state, ActionKey action) where T : struct, ITrait
         {
-            return state.GetTraitOnObjectAtIndex<T>(action[k_FromIndex]);
+            return state.GetTraitOnObjectAtIndex<T>(action[k_AgentIndex]);
         }
         
         public static T GetToTrait<T>(StateData state, ActionKey action) where T : struct, ITrait
@@ -133,9 +141,9 @@ namespace AI.Planner.Actions.Mu
             return state.GetTraitOnObjectAtIndex<T>(action[k_ToIndex]);
         }
         
-        public static T GetObjTrait<T>(StateData state, ActionKey action) where T : struct, ITrait
+        public static T GetTimeTrait<T>(StateData state, ActionKey action) where T : struct, ITrait
         {
-            return state.GetTraitOnObjectAtIndex<T>(action[k_objIndex]);
+            return state.GetTraitOnObjectAtIndex<T>(action[k_TimeIndex]);
         }
         
     }

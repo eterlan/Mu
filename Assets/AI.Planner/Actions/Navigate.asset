@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Navigate
   m_EditorClassIdentifier: 
   m_Parameters:
-  - m_Name: From
+  - m_Name: Agent
     m_RequiredTraits:
     - {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
     - {fileID: 11400000, guid: 28109162fab1b433ab927dea924de90f, type: 2}
@@ -22,9 +22,13 @@ MonoBehaviour:
     m_RequiredTraits:
     - {fileID: 11400000, guid: 9d24b90158d644873a4d488182380074, type: 2}
     m_ProhibitedTraits: []
+  - m_Name: Time
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: bdbf7a1f9df774a24a5d24ee6fe3b60d, type: 2}
+    m_ProhibitedTraits: []
   m_Preconditions:
   - m_OperandA:
-    - From
+    - Agent
     - Location.Position
     m_Operator: '!='
     m_OperandB:
@@ -32,9 +36,16 @@ MonoBehaviour:
     - Location.Position
   m_CreatedObjects: []
   m_RemovedObjects: []
-  m_Effects: []
-  m_Reward: 0
-  m_OperationalActionType: 
+  m_Effects:
+  - m_OperandA:
+    - Agent
+    - Location.Position
+    m_Operator: =
+    m_OperandB:
+    - To
+    - Location.Position
+  m_Reward: -2
+  m_OperationalActionType: NavigateAction
   m_CustomEffect: 
   m_CustomReward: 
   m_CustomPrecondition: 

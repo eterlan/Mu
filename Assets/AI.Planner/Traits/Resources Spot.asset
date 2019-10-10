@@ -33,3 +33,23 @@ MonoBehaviour:
       m_StringValue: 
       m_ObjectValue: {fileID: 0}
     m_HiddenField: 0
+  - m_Name: AverageAcquisition
+    m_Type: System.Int64
+    m_DefaultValue:
+      m_Name: 
+      m_BoolValue: 0
+      m_FloatValue: 0
+      m_IntValue: 2
+      m_StringValue: 
+      m_ObjectValue: {fileID: 0}
+    m_HiddenField: 0
+  - m_Name: ExploitTime
+    m_Type: System.Single
+    m_DefaultValue:
+      m_Name: 
+      m_BoolValue: 0
+      m_FloatValue: 2
+      m_IntValue: 2
+      m_StringValue: 
+      m_ObjectValue: {fileID: 0}
+    m_HiddenField: 0

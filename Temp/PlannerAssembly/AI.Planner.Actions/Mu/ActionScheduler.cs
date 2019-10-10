@@ -26,13 +26,19 @@ namespace AI.Planner.Actions.Mu
 
         static Guid[] s_ActionGuids = {
             Consume.ActionGuid,
+            Exploit.ActionGuid,
             Navigate.ActionGuid,
+            Pickup.ActionGuid,
+            Sleep.ActionGuid,
         };
 
         static Dictionary<Guid, string> s_ActionGuidToNameLookup = new Dictionary<Guid,string>()
         {
             { Consume.ActionGuid, nameof(Consume) },
+            { Exploit.ActionGuid, nameof(Exploit) },
             { Navigate.ActionGuid, nameof(Navigate) },
+            { Pickup.ActionGuid, nameof(Pickup) },
+            { Sleep.ActionGuid, nameof(Sleep) },
         };
 
         public string GetActionName(IActionKey actionKey)
@@ -46,14 +52,26 @@ namespace AI.Planner.Actions.Mu
             var ConsumeDataContext = StateManager.GetStateDataContext();
             var ConsumeECB = new EntityCommandBuffer(Allocator.TempJob);
             ConsumeDataContext.EntityCommandBuffer = ConsumeECB.ToConcurrent();
+            var ExploitDataContext = StateManager.GetStateDataContext();
+            var ExploitECB = new EntityCommandBuffer(Allocator.TempJob);
+            ExploitDataContext.EntityCommandBuffer = ExploitECB.ToConcurrent();
             var NavigateDataContext = StateManager.GetStateDataContext();
             var NavigateECB = new EntityCommandBuffer(Allocator.TempJob);
             NavigateDataContext.EntityCommandBuffer = NavigateECB.ToConcurrent();
+            var PickupDataContext = StateManager.GetStateDataContext();
+            var PickupECB = new EntityCommandBuffer(Allocator.TempJob);
+            PickupDataContext.EntityCommandBuffer = PickupECB.ToConcurrent();
+            var SleepDataContext = StateManager.GetStateDataContext();
+            var SleepECB = new EntityCommandBuffer(Allocator.TempJob);
+            SleepDataContext.EntityCommandBuffer = SleepECB.ToConcurrent();
 
-            var allActionJobs = new NativeArray<JobHandle>(2, Allocator.TempJob)
+            var allActionJobs = new NativeArray<JobHandle>(5, Allocator.TempJob)
             {
                 [0] = new Consume(UnexpandedStates, ConsumeDataContext).Schedule(UnexpandedStates, 0, inputDeps),
-                [1] = new Navigate(UnexpandedStates, NavigateDataContext).Schedule(UnexpandedStates, 0, inputDeps),
+                [1] = new Exploit(UnexpandedStates, ExploitDataContext).Schedule(UnexpandedStates, 0, inputDeps),
+                [2] = new Navigate(UnexpandedStates, NavigateDataContext).Schedule(UnexpandedStates, 0, inputDeps),
+                [3] = new Pickup(UnexpandedStates, PickupDataContext).Schedule(UnexpandedStates, 0, inputDeps),
+                [4] = new Sleep(UnexpandedStates, SleepDataContext).Schedule(UnexpandedStates, 0, inputDeps),
             };
 
             JobHandle.CompleteAll(allActionJobs);
@@ -71,6 +89,16 @@ namespace AI.Planner.Actions.Mu
                 entityManager.RemoveComponent<ConsumeFixupReference>(stateEntity);
             }
 
+            ExploitECB.Playback(entityManager);
+            for (int i = 0; i < UnexpandedStates.Length; i++)
+            {
+                var stateEntity = UnexpandedStates[i].Entity;
+                var ExploitRefs = entityManager.GetBuffer<ExploitFixupReference>(stateEntity);
+                for (int j = 0; j < ExploitRefs.Length; j++)
+                    CreatedStateInfo.Enqueue(ExploitRefs[j].TransitionInfo);
+                entityManager.RemoveComponent<ExploitFixupReference>(stateEntity);
+            }
+
             NavigateECB.Playback(entityManager);
             for (int i = 0; i < UnexpandedStates.Length; i++)
             {
@@ -81,9 +109,32 @@ namespace AI.Planner.Actions.Mu
                 entityManager.RemoveComponent<NavigateFixupReference>(stateEntity);
             }
 
+            PickupECB.Playback(entityManager);
+            for (int i = 0; i < UnexpandedStates.Length; i++)
+            {
+                var stateEntity = UnexpandedStates[i].Entity;
+                var PickupRefs = entityManager.GetBuffer<PickupFixupReference>(stateEntity);
+                for (int j = 0; j < PickupRefs.Length; j++)
+                    CreatedStateInfo.Enqueue(PickupRefs[j].TransitionInfo);
+                entityManager.RemoveComponent<PickupFixupReference>(stateEntity);
+            }
+
+            SleepECB.Playback(entityManager);
+            for (int i = 0; i < UnexpandedStates.Length; i++)
+            {
+                var stateEntity = UnexpandedStates[i].Entity;
+                var SleepRefs = entityManager.GetBuffer<SleepFixupReference>(stateEntity);
+                for (int j = 0; j < SleepRefs.Length; j++)
+                    CreatedStateInfo.Enqueue(SleepRefs[j].TransitionInfo);
+                entityManager.RemoveComponent<SleepFixupReference>(stateEntity);
+            }
+
             allActionJobs.Dispose();
             ConsumeECB.Dispose();
+            ExploitECB.Dispose();
             NavigateECB.Dispose();
+            PickupECB.Dispose();
+            SleepECB.Dispose();
 
             return default;
         }

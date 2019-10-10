@@ -13,40 +13,60 @@ MonoBehaviour:
   m_Name: Consume
   m_EditorClassIdentifier: 
   m_Parameters:
-  - m_Name: Inventory
-    m_RequiredTraits:
-    - {fileID: 11400000, guid: 2bd1e515ae2f240eeb9ecce0ba537756, type: 2}
-    m_ProhibitedTraits: []
   - m_Name: Need
     m_RequiredTraits:
     - {fileID: 11400000, guid: 077e3443b9460411b8a29c943b67abab, type: 2}
     m_ProhibitedTraits: []
+  - m_Name: Inventory
+    m_RequiredTraits:
+    - {fileID: 11400000, guid: 28109162fab1b433ab927dea924de90f, type: 2}
+    - {fileID: 11400000, guid: 2bd1e515ae2f240eeb9ecce0ba537756, type: 2}
+    m_ProhibitedTraits: []
   m_Preconditions:
   - m_OperandA:
     - Inventory
-    - Inventory.Amount
-    m_Operator: '>'
+    - Item.ItemType
+    m_Operator: ==
     m_OperandB:
-    - 0
+    - ItemType.Consumable
   - m_OperandA:
     - Inventory
-    - Inventory.SatisfiesNeed
+    - Item.SatisfiesNeed
     m_Operator: ==
     m_OperandB:
     - Need
     - Need.NeedType
+  - m_OperandA:
+    - Inventory
+    - Item.Amount
+    m_Operator: '>'
+    m_OperandB:
+    - 0
   - m_OperandA:
     - Need
     - Need.Urgency
     m_Operator: '>'
     m_OperandB:
     - Inventory
-    - Inventory.Restoration
+    - Item.Restoration
   m_CreatedObjects: []
   m_RemovedObjects: []
-  m_Effects: []
+  m_Effects:
+  - m_OperandA:
+    - Inventory
+    - Item.Amount
+    m_Operator: -=
+    m_OperandB:
+    - 1
+  - m_OperandA:
+    - Need
+    - Need.Urgency
+    m_Operator: -=
+    m_OperandB:
+    - Inventory
+    - Item.Restoration
   m_Reward: 0
-  m_OperationalActionType: 
+  m_OperationalActionType: ConsumeAction
   m_CustomEffect: 
   m_CustomReward: 
   m_CustomPrecondition: 
